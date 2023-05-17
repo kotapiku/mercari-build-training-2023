@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Item from "@mui/material/Stack";
 
 const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
 
@@ -58,42 +59,55 @@ export const Listing: React.FC<Prop> = (props) => {
       });
   };
   return (
-    <Box
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
-      }}
-    >
-      <form onSubmit={onSubmit}>
-        <div>
+    <form onSubmit={onSubmit}>
+      <Stack
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Item>
           <TextField
             type="text"
             required
             name="name"
             id="name"
-            placeholder="name"
-            variant="standard"
+            label="name"
+            variant="outlined"
             onChange={onValueChange}
+            size="small"
           />
+        </Item>
+        <Item>
           <TextField
             type="text"
+            required
             name="category"
             id="category"
-            placeholder="category"
-            variant="standard"
+            label="category"
+            variant="outlined"
             onChange={onValueChange}
+            size="small"
           />
-          <TextField
-            type="file"
-            required
-            name="image"
-            id="image"
-            placeholder="image"
-            variant="standard"
-            onChange={onFileChange}
-          />
-          <Button type="submit">List this item</Button>
-        </div>
-      </form>
-    </Box>
+        </Item>
+        <Item>
+          <Button variant="outlined" component="label">
+            Choose jpeg file
+            <input
+              type="file"
+              name="image"
+              id="image"
+              onChange={onFileChange}
+              hidden={true}
+            />
+          </Button>
+        </Item>
+        <Item>
+          <Button type="submit" variant="contained">
+            Register
+          </Button>
+        </Item>
+      </Stack>
+    </form>
   );
 };

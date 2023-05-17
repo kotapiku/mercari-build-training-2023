@@ -6,6 +6,9 @@ import AppBar from "@mui/material/AppBar";
 import { Typography } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Item from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
 
 function App() {
   // reload ItemList after Listing complete
@@ -19,13 +22,21 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container>
-        <div>
-          <Listing onListingCompleted={() => setReload(true)} />
-        </div>
-        <div>
-          <ItemList reload={reload} onLoadCompleted={() => setReload(false)} />
-        </div>
+      <Container sx={{ my: 3 }}>
+        <Stack
+          spacing={5}
+          divider={<Divider orientation="horizontal" flexItem />}
+        >
+          <Item>
+            <Listing onListingCompleted={() => setReload(true)} />
+          </Item>
+          <Item>
+            <ItemList
+              reload={reload}
+              onLoadCompleted={() => setReload(false)}
+            />
+          </Item>
+        </Stack>
       </Container>
     </div>
   );
