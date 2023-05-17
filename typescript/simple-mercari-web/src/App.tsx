@@ -12,11 +12,6 @@ function App() {
     const [reload, setReload] = useState(true);
     return (
         <div>
-            {/* <header className='Title'> */}
-            {/* <p>
-                    <b>Simple Mercari</b>
-                </p> */}
-            {/* </header> */}
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}
