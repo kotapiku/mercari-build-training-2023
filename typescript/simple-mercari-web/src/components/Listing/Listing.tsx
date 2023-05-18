@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Item from "@mui/material/Stack";
 
-const server = process.env.REACT_APP_API_URL || 'http://127.0.0.1:9000';
+const server = process.env.REACT_APP_API_URL || "http://127.0.0.1:9000";
 
 interface Prop {
   onListingCompleted?: () => void;
 }
 
 type formDataType = {
-  name: string,
-  category: string,
-  image: string | File,
-}
+  name: string;
+  category: string;
+  image: string | File;
+};
 
 export const Listing: React.FC<Prop> = (props) => {
   const { onListingCompleted } = props;
@@ -23,44 +27,87 @@ export const Listing: React.FC<Prop> = (props) => {
 
   const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
-      ...values, [event.target.name]: event.target.value,
-    })
+      ...values,
+      [event.target.name]: event.target.value,
+    });
   };
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
-      ...values, [event.target.name]: event.target.files![0],
-    })
+      ...values,
+      [event.target.name]: event.target.files![0],
+    });
   };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData()
-    data.append('name', values.name)
-    data.append('category', values.category)
-    data.append('image', values.image)
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("name", values.name);
+    data.append("category", values.category);
+    data.append("image", values.image);
 
-    fetch(server.concat('/items'), {
-      method: 'POST',
-      mode: 'cors',
+    console.log(values);
+    await fetch(server.concat("/items"), {
+      method: "POST",
+      mode: "cors",
       body: data,
     })
-      .then(response => {
-        console.log('POST status:', response.statusText);
+      .then((response) => {
+        console.log("POST status:", response.statusText);
         onListingCompleted && onListingCompleted();
       })
       .catch((error) => {
-        console.error('POST error:', error);
-      })
+        console.error("POST error:", error);
+      });
   };
   return (
-    <div className='Listing'>
-      <form onSubmit={onSubmit}>
-        <div>
-          <input type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-          <input type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
-          <input type='file' name='image' id='image' onChange={onFileChange} required />
-          <button type='submit'>List this item</button>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={onSubmit}>
+      <Stack
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Item>
+          <TextField
+            type="text"
+            required
+            name="name"
+            id="name"
+            label="name"
+            variant="outlined"
+            onChange={onValueChange}
+            size="small"
+          />
+        </Item>
+        <Item>
+          <TextField
+            type="text"
+            required
+            name="category"
+            id="category"
+            label="category"
+            variant="outlined"
+            onChange={onValueChange}
+            size="small"
+          />
+        </Item>
+        <Item>
+          <Button variant="outlined" component="label">
+            Choose jpeg file
+            <input
+              type="file"
+              name="image"
+              id="image"
+              onChange={onFileChange}
+              hidden={true}
+            />
+          </Button>
+        </Item>
+        <Item>
+          <Button type="submit" variant="contained">
+            Register
+          </Button>
+        </Item>
+      </Stack>
+    </form>
   );
-}
+};

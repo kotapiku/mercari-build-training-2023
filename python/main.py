@@ -74,7 +74,7 @@ select_command = """
         items.id,
         items.name,
         category.name as category,
-        items.image_name
+        items.image_name as image_filename
     from items
     left outer join category
     on items.category=category.id
@@ -88,7 +88,7 @@ def list_item():
     cur = con.cursor()
     res = cur.execute(select_command).fetchall()
     con.close()
-    return res
+    return {"items": res}
 
 
 @app.get("/items/{item_id}")
@@ -100,7 +100,7 @@ def get_item(item_id: int):
     con.close()
 
     if res is None:
-        return []
+        raise HTTPException(status_code=404, detail="Item not found")
 
     return res
 
@@ -114,7 +114,7 @@ def get_items_with_keyword(keyword: str):
     cur = con.cursor()
     res = cur.execute(select_command + "where items.name=?", (keyword,)).fetchall()
     con.close()
-    return res
+    return {"items": res}
 
 
 @app.get("/image/{image_filename}")
