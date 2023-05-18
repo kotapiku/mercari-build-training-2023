@@ -22,13 +22,13 @@ interface Prop {
 export const ItemList: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
-  const fetchItems = () => {
+  const fetchItems = async () => {
     fetch(server.concat("/items"), {
       method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
       },
     })
       .then((response) => response.json())
