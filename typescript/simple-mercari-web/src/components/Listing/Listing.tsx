@@ -37,7 +37,7 @@ export const Listing: React.FC<Prop> = (props) => {
       [event.target.name]: event.target.files![0],
     });
   };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData();
     data.append("name", values.name);
@@ -45,7 +45,7 @@ export const Listing: React.FC<Prop> = (props) => {
     data.append("image", values.image);
 
     console.log(values);
-    fetch(server.concat("/items"), {
+    await fetch(server.concat("/items"), {
       method: "POST",
       mode: "cors",
       body: data,

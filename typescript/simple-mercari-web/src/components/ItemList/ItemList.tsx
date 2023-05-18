@@ -23,7 +23,7 @@ export const ItemList: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [items, setItems] = useState<Item[]>([]);
   const fetchItems = async () => {
-    fetch(server.concat("/items"), {
+    await fetch(server.concat("/items"), {
       method: "GET",
       mode: "cors",
       headers: {
@@ -33,7 +33,6 @@ export const ItemList: React.FC<Prop> = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("GET success:", data);
         setItems(data.items);
         onLoadCompleted && onLoadCompleted();
       })
@@ -51,7 +50,6 @@ export const ItemList: React.FC<Prop> = (props) => {
   return (
     <Grid container spacing={2}>
       {items.map((item) => {
-        console.log(item.image_filename);
         return (
           <Grid item xs={6} sm={3} key={item.id}>
             <Card sx={{ minHeight: 200 }}>
