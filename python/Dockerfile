@@ -12,7 +12,8 @@ RUN sqlite3 db/mercari.sqlite3 < db/items.db
 
 WORKDIR /home/trainee/python
 RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip cache purge
 ENV PATH $PATH:/home/trainee/.local/bin
 
 RUN chown -R trainee:mercari /home/trainee/db \
