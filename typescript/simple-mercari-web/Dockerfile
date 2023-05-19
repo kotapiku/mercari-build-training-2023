@@ -1,15 +1,22 @@
-FROM node:16-alpine
+# install dependencies and build
+FROM node:16-alpine as builder
+
 WORKDIR /app
-
-RUN addgroup -S mercari && adduser -S trainee -G mercari
-
-COPY package.json package-lock.json tsconfig.json ./
-COPY public public
-COPY src src
-
+COPY package*.json tsconfig.json ./
 RUN npm ci
 
-RUN mkdir node_modules/.cache && chown -R trainee:mercari node_modules/.cache
+COPY public public
+COPY src src
+RUN npm run build
+
+# 実行環境
+FROM node:16-alpine
+
+WORKDIR /app
+COPY --from=builder /app/build ./build
+RUN npm install -g serve && npm cache clean --force
+
+RUN addgroup -S mercari && adduser -S trainee -G mercari
 USER trainee
 
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build", "-l", "3000"]
